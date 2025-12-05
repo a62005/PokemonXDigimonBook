@@ -1,8 +1,9 @@
 package com.example.pokemonxdigimon.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokemonxdigimon.mvi.PokemonIntent
+import com.example.pokemonxdigimon.base.BaseIntent
+import com.example.pokemonxdigimon.base.BaseViewModel
+import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonUiState
 import com.example.pokemonxdigimon.repository.PokemonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +14,11 @@ import kotlinx.coroutines.launch
 
 class PokemonViewModel(
     private val repository: PokemonRepository
-) : ViewModel() {
+) : BaseViewModel<PokemonUiState>() {
+    override val _uiState = MutableStateFlow(PokemonUiState())
 
-    private val _uiState = MutableStateFlow(PokemonUiState())
-    val uiState: StateFlow<PokemonUiState> = _uiState.asStateFlow()
-    
+    override val uiState: StateFlow<PokemonUiState> = _uiState.asStateFlow()
+
     private var currentMaxId = 0
 
     init {
@@ -32,10 +33,11 @@ class PokemonViewModel(
         handleIntent(PokemonIntent.LoadInitialData)
     }
 
-    fun handleIntent(intent: PokemonIntent) {
+    override fun handleIntent(intent: BaseIntent?) {
         when (intent) {
             is PokemonIntent.LoadInitialData -> loadInitialData()
             is PokemonIntent.LoadMoreData -> loadMoreData()
+            else -> clearError()
         }
     }
 
@@ -43,14 +45,14 @@ class PokemonViewModel(
         if (_uiState.value.isInitialLoading) return
         
         viewModelScope.launch {
-            _uiState.update { it.copy(isInitialLoading = true) }
-            try {
-                repository.loadMorePokemon(startId = 1, count = 20)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(error = e.message) }
-            } finally {
-                _uiState.update { it.copy(isInitialLoading = false) }
+            _uiState.update { it.copy(isInitialLoading = true, error = null) }
+            
+            val result = repository.loadMorePokemon(startId = 1, count = 20)
+            if (result.hasError) {
+                _uiState.update { it.copy(error = result.error?.message) }
             }
+            
+            _uiState.update { it.copy(isInitialLoading = false) }
         }
     }
 
@@ -58,15 +60,19 @@ class PokemonViewModel(
         if (_uiState.value.isLoadingMore || !_uiState.value.hasMore) return
         
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoadingMore = true) }
-            try {
-                val nextId = currentMaxId + 1
-                repository.loadMorePokemon(startId = nextId, count = 20)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(error = e.message) }
-            } finally {
-                _uiState.update { it.copy(isLoadingMore = false) }
+            _uiState.update { it.copy(isLoadingMore = true, error = null) }
+            
+            val nextId = currentMaxId + 1
+            val result = repository.loadMorePokemon(startId = nextId, count = 20)
+            if (result.hasError) {
+                _uiState.update { it.copy(error = result.error?.message) }
             }
+            
+            _uiState.update { it.copy(isLoadingMore = false) }
         }
+    }
+    
+    private fun clearError() {
+        _uiState.update { it.copy(error = null) }
     }
 }

@@ -30,7 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.R
-import com.example.pokemonxdigimon.mvi.PokemonIntent
+import com.example.pokemonxdigimon.base.BaseIntent
+import com.example.pokemonxdigimon.base.ErrorHandler
+import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonUiState
 import com.example.pokemonxdigimon.ui.component.PokemonCard
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
@@ -40,10 +42,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun PokemonScreen(
     uiState: PokemonUiState,
-    onIntent: (PokemonIntent) -> Unit,
+    onIntent: (BaseIntent?) -> Unit,
     onBackClick: () -> Unit
 ) {
     val listState = rememberLazyGridState()
+    
+    // 通用錯誤處理
+    ErrorHandler(
+        uiState = uiState,
+        onClearError = { onIntent(null) }
+    )
 
     // 監聽列表變化和滾動位置，觸發載入更多
     LaunchedEffect(uiState.pokemonList.size, uiState.isLoadingMore) {
@@ -52,10 +60,7 @@ fun PokemonScreen(
             val totalItems = layoutInfo.totalItemsCount
             val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
             
-            // 計算剩餘未顯示的項目數
             val remainingItems = totalItems - lastVisibleItem - 1
-            
-            // 當剩餘項目 <= 8 時觸發載入（滑到第 12 個，剩餘 8 個）
             totalItems > 0 && remainingItems <= 8
         }
             .distinctUntilChanged()
