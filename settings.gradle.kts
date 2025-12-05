@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "PokemonXDigimon"
 include(":app")
 include(":lib_network")
+include(":lib_database")

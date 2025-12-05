@@ -2,6 +2,7 @@ package com.example.pokemonxdigimon
 
 import android.content.Context
 import androidx.startup.Initializer
+import com.example.lib_database.DatabaseInitializer
 import com.example.network.NetworkInitializer
 
 class AppInitializer : Initializer<Unit> {
@@ -11,7 +12,8 @@ class AppInitializer : Initializer<Unit> {
     override fun dependencies(): List<Class<out Initializer<*>?>?> {
         return listOf(
             StartupInitializer::class.java,
-            NetworkInitializer::class.java
+            NetworkInitializer::class.java,
+            DatabaseInitializer::class.java
         )
     }
 }

@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "POKEMON_BASE_URL", "\" https ://pokeapi.co/api/v2/\"")
+        buildConfigField("String", "POKEMON_BASE_URL", "\" https://pokeapi.co/api/v2/\"")
     }
 
     buildTypes {
