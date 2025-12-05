@@ -6,15 +6,17 @@ import org.koin.dsl.module
 
 internal val networkModule = module {
     single<IHttpClient>(named("pokemon")) {
-        val baseUrl = Config.POKEMON_BASE_URL
+        val baseUrl = BuildConfig.POKEMON_BASE_URL
         HttpClientImp.Builder(baseUrl)
             .setTimeout(1000L)
+            .enableLog(BuildConfig.DEBUG)
             .build()
     }
-    single<IHttpClient>(named("digimon")) {
-        val baseUrl = Config.DIGIMON_BASE_URL
-        HttpClientImp.Builder(baseUrl)
-            .setTimeout(1000L)
-            .build()
-    }
+//    single<IHttpClient>(named("digimon")) {
+//        val baseUrl = BuildConfig.POKEMON_BASE_URL
+//        HttpClientImp.Builder(baseUrl)
+//            .setTimeout(1000L)
+//            .enableLog(BuildConfig.DEBUG_MODE)
+//            .build()
+//    }
 }

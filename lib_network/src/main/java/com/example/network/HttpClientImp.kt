@@ -32,10 +32,10 @@ class HttpClientImp(
             val response = request()
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) {
-                    return ApiResponseData(body)
+                return if (body != null) {
+                    ApiResponseData(body)
                 } else {
-                    return ApiResponseData(
+                    ApiResponseData(
                         data = null,
                         hasError = true,
                         error = ApiFailedResponse(

@@ -14,9 +14,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "POKEMON_BASE_URL", "\" https ://pokeapi.co/api/v2/\"")
     }
 
     buildTypes {
+        debug {
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -24,6 +28,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
