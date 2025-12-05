@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.lib_database.converter.Converters
 import com.example.lib_database.dao.PokemonDao
 import com.example.lib_database.entity.PokemonEntity
 
@@ -12,6 +14,7 @@ import com.example.lib_database.entity.PokemonEntity
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     
     companion object {

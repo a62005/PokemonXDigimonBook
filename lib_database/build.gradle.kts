@@ -48,6 +48,9 @@ dependencies {
     api(libs.room.ktx)
     ksp(libs.room.compiler)
     
+    // Gson for TypeConverter
+    implementation(libs.gson)
+    
     // Koin
     implementation(libs.koin)
     implementation(libs.startup)
