@@ -7,5 +7,5 @@ data class PokemonUiState(
     val isInitialLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val hasMore: Boolean = true,
-    val error: UiError? = null
+    val error: String? = null
 )
