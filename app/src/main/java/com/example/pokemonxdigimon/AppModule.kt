@@ -1,8 +1,10 @@
-package com.example.pokemonxdigimon.di
+package com.example.pokemonxdigimon
 
 import com.example.pokemonxdigimon.manager.NetworkManager
 import com.example.pokemonxdigimon.repository.MainRepository
+import com.example.pokemonxdigimon.repository.PokemonRepository
 import com.example.pokemonxdigimon.viewmodel.MainViewModel
+import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
@@ -11,10 +13,12 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     factoryOf(::MainRepository)
+    factoryOf(::PokemonRepository)
 }
 
 val viewModelModule = module {
     viewModelOf(::MainViewModel)
+    viewModelOf(::PokemonViewModel)
 }
 
 val utilsModule = module {

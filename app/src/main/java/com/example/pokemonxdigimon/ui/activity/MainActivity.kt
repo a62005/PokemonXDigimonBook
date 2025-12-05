@@ -12,6 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.pokemonxdigimon.ui.navigation.NavGraph
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
+import com.example.pokemonxdigimon.viewmodel.MainViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent() {
+    val mainViewModel: MainViewModel = koinViewModel()
+    
     PokemonXDigimonTheme {
         val navController = rememberNavController()
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
