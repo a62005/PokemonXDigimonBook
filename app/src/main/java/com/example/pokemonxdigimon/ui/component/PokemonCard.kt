@@ -23,9 +23,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
+import com.example.pokemonxdigimon.utils.ColorUtils
 
 @Composable
 fun PokemonCard(simplePokemonBean: SimplePokemonBean) {
+    val backgroundColor = Color(ColorUtils.getTypeColor(simplePokemonBean.mainType))
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,7 +39,7 @@ fun PokemonCard(simplePokemonBean: SimplePokemonBean) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
