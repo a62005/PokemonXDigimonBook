@@ -82,12 +82,12 @@ class PokemonRepository(
                                 name = detail.name,
                                 height = detail.height,
                                 weight = detail.weight,
-                                types = detail.types.map { it.type.name },
+                                types = detail.types.map { it.pokemonTypeName.name },
                                 stat = Stat(
-                                    hp = detail.stats.find { it.stat.name == "hp" }?.baseStat ?: 0,
-                                    attack = detail.stats.find { it.stat.name == "attack" }?.baseStat ?: 0,
-                                    defense = detail.stats.find { it.stat.name == "defense" }?.baseStat ?: 0,
-                                    speed = detail.stats.find { it.stat.name == "speed" }?.baseStat ?: 0,
+                                    hp = detail.stats.find { it.pokemonStatName.name == "hp" }?.baseStat ?: 0,
+                                    attack = detail.stats.find { it.pokemonStatName.name == "attack" }?.baseStat ?: 0,
+                                    defense = detail.stats.find { it.pokemonStatName.name == "defense" }?.baseStat ?: 0,
+                                    speed = detail.stats.find { it.pokemonStatName.name == "speed" }?.baseStat ?: 0,
                                     exp = detail.baseExperience
                                 )
                             )
