@@ -14,7 +14,13 @@ data class PokemonEntity(
     val types: List<String>,
     @Embedded
     val stat: Stat
-)
+) {
+    val mainType: String
+        get() = types.firstOrNull() ?: "unknown"
+
+    val imageUrl: String
+        get() = getImageUrl(id)
+}
 
 data class Stat(
     val hp: Int,
@@ -33,5 +39,7 @@ data class SimplePokemonBean(
         get() = types.firstOrNull() ?: "unknown"
     
     val imageUrl: String
-        get() = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
+        get() = getImageUrl(id)
 }
+
+private fun getImageUrl(id: Int) = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
