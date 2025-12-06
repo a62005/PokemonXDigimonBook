@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.lib_database.converter.Converters
 import com.example.lib_database.dao.PokemonDao
+import com.example.lib_database.entity.DigimonEntity
 import com.example.lib_database.entity.PokemonEntity
 
 @Database(
-    entities = [PokemonEntity::class],
+    entities = [PokemonEntity::class, DigimonEntity::class],
     version = 1,
     exportSchema = false
 )
