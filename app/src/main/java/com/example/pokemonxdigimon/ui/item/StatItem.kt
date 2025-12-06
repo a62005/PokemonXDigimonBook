@@ -30,10 +30,10 @@ fun StatItem(
     name: String,
     value: Int,
     maxValue: Int = 300,
-    color: Color = Color(0xFF4CAF50)
+    color: Color
 ) {
     val progress = (value.toFloat() / maxValue).coerceIn(0f, 1f)
-    val textOnRight = progress < 0.2f
+    val textOnRight = progress < 0.25f
     
     Row(
         modifier = Modifier.fillMaxWidth(),

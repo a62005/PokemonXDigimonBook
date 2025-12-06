@@ -1,7 +1,7 @@
 package com.example.pokemonxdigimon.ui.model
 
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import androidx.compose.ui.graphics.Color
 import com.example.lib_database.entity.Stat
 import com.example.pokemonxdigimon.R
 
@@ -11,7 +11,7 @@ import com.example.pokemonxdigimon.R
 data class StatConfig(
     @StringRes val nameResId: Int,
     val getValue: (Stat) -> Int,
-    val color: Color
+    @ColorRes val colorResId: Int
 )
 
 /**
@@ -22,27 +22,27 @@ object StatConfigs {
         StatConfig(
             nameResId = R.string.hp,
             getValue = { it.hp },
-            color = Color(0xFFD33A48)
+            colorResId = R.color.stat_hp
         ),
         StatConfig(
             nameResId = R.string.attack,
             getValue = { it.attack },
-            color = Color(0xFFFFA42B)
+            colorResId = R.color.stat_attack
         ),
         StatConfig(
             nameResId = R.string.defense,
             getValue = { it.defense },
-            color = Color(0xFF068FE2)
+            colorResId = R.color.stat_defense
         ),
         StatConfig(
             nameResId = R.string.speed,
             getValue = { it.speed },
-            color = Color(0xFF91AFC6)
+            colorResId = R.color.stat_speed
         ),
         StatConfig(
             nameResId = R.string.exp,
             getValue = { it.exp },
-            color = Color(0xFF398D3C)
+            colorResId = R.color.stat_exp
         )
     )
 }

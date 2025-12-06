@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -62,20 +63,20 @@ fun PokemonDetailScreen(
 ) {
     val viewModel: PokemonDetailViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
-    
+
     // 載入 Pokemon 詳細資訊
     LaunchedEffect(pokemonId) {
         pokemonId?.let {
             viewModel.handleIntent(PokemonDetailIntent.LoadPokemonDetail(it))
         }
     }
-    
+
     // 通用錯誤處理
     ErrorHandler(
         uiState = uiState,
         onClearError = { viewModel.handleIntent(null) }
     )
-    
+
     when {
         uiState.isLoading && uiState.pokemon == null -> {
             // Loading 狀態
@@ -86,6 +87,7 @@ fun PokemonDetailScreen(
                 CircularProgressIndicator()
             }
         }
+
         uiState.pokemon != null -> {
             // 顯示詳情
             PokemonDetailScreenContent(
@@ -108,153 +110,148 @@ private fun PokemonDetailScreenContent(
 ) {
     val backgroundColor = Color(ColorUtils.getTypeColor(pokemon.mainType))
     val imageUrl = pokemon.imageUrl
-    
-    Box(
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.DarkGray)
     ) {
-        Column(
+        // 有顏色的背景區域（帶圓角）
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .weight(1f)
+                .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
+                .background(backgroundColor)
         ) {
-            // 有顏色的背景區域（帶圓角）
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
-                    .background(backgroundColor)
+                    .fillMaxSize()
+                    .statusBarsPadding()
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .statusBarsPadding()
+                // 返回按鈕
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.padding(8.dp)
                 ) {
-                    // 返回按鈕
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                    
-                    with(sharedTransitionScope) {
-                        // Pokemon 圖片
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = pokemon.name,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(12.dp)
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "pokemon-image-${pokemon.id}"),
-                                    animatedVisibilityScope = animatedContentScope
-                                ),
-                            contentScale = ContentScale.FillHeight
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+
+                with(sharedTransitionScope) {
+                    // Pokemon 圖片
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = pokemon.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(12.dp)
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "pokemon-image-${pokemon.id}"),
+                                animatedVisibilityScope = animatedContentScope
+                            ),
+                        contentScale = ContentScale.FillHeight
+                    )
                 }
             }
-            
-            // 詳細資訊區域
-            Box(
+        }
+
+        // 詳細資訊區域
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(2f)
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f)
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    with(sharedTransitionScope) {
-                        // Pokemon 名稱
-                        Text(
-                            text = pokemon.name,
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            fontSize = 32.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .sharedBounds(
-                                    sharedContentState = rememberSharedContentState(key = "pokemon-name-${pokemon.id}"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                    boundsTransform = { _, _ ->
-                                        tween(durationMillis = 300)
-                                    }
-                                )
-                        )
-                    }
-                    
-                    // TYPE 列表
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        pokemon.types.forEachIndexed { index, type ->
-                            TypeItem(type = type)
-                            if (index < pokemon.types.size - 1) {
-                                Spacer(modifier = Modifier.width(16.dp))
-                            }
-                        }
-                    }
-                    
-                    // 身高體重
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 26.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        // 體重
-                        InfoItem(
-                            label = stringResource(R.string.weight),
-                            value = "${pokemon.weightInKg} KG"
-                        )
-                        
-                        // 身高
-                        InfoItem(
-                            label = stringResource(R.string.height),
-                            value = "${pokemon.heightInM} M"
-                        )
-                    }
-                    
-                    // Base Stats 標題
+                with(sharedTransitionScope) {
+                    // Pokemon 名稱
                     Text(
-                        text = stringResource(R.string.base_stats),
-                        style = MaterialTheme.typography.headlineSmall,
+                        text = pokemon.name,
+                        style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
+                        fontSize = 32.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 32.dp, bottom = 16.dp)
-                    )
-                    
-                    // 能力值列表
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        StatConfigs.defaultStats.forEach { statConfig ->
-                            StatItem(
-                                name = stringResource(statConfig.nameResId),
-                                value = statConfig.getValue(pokemon.stat),
-                                color = statConfig.color
+                            .sharedBounds(
+                                sharedContentState = rememberSharedContentState(key = "pokemon-name-${pokemon.id}"),
+                                animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 300)
+                                }
                             )
+                    )
+                }
+
+                // TYPE 列表
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    pokemon.types.forEachIndexed { index, type ->
+                        TypeItem(type = type)
+                        if (index < pokemon.types.size - 1) {
+                            Spacer(modifier = Modifier.width(16.dp))
                         }
+                    }
+                }
+
+                // 身高體重
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 26.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    // 體重
+                    InfoItem(
+                        label = stringResource(R.string.weight),
+                        value = "${pokemon.weightInKg} KG"
+                    )
+
+                    // 身高
+                    InfoItem(
+                        label = stringResource(R.string.height),
+                        value = "${pokemon.heightInM} M"
+                    )
+                }
+
+                // Base Stats 標題
+                Text(
+                    text = stringResource(R.string.base_stats),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp, bottom = 16.dp)
+                )
+
+                // 能力值列表
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    StatConfigs.defaultStats.forEach { statConfig ->
+                        StatItem(
+                            name = stringResource(statConfig.nameResId),
+                            value = statConfig.getValue(pokemon.stat),
+                            color = colorResource(statConfig.colorResId)
+                        )
                     }
                 }
             }

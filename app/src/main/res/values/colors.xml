@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Stat Colors -->
+    <color name="stat_hp">#D33A48</color>
+    <color name="stat_attack">#FFA42B</color>
+    <color name="stat_defense">#068FE2</color>
+    <color name="stat_speed">#91AFC6</color>
+    <color name="stat_exp">#398D3C</color>
 </resources>
