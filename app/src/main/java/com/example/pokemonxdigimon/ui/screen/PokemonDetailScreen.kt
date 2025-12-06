@@ -44,6 +44,8 @@ import com.example.lib_database.entity.PokemonEntity
 import com.example.pokemonxdigimon.R
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonDetailIntent
+import com.example.pokemonxdigimon.ui.item.InfoItem
+import com.example.pokemonxdigimon.ui.item.StatItem
 import com.example.pokemonxdigimon.ui.item.TypeItem
 import com.example.pokemonxdigimon.ui.model.StatConfigs
 import com.example.pokemonxdigimon.utils.ColorUtils
@@ -260,119 +262,3 @@ private fun PokemonDetailScreenContent(
     }
 }
 
-
-/**
- * 資訊項目組件（身高/體重）
- */
-@Composable
-private fun InfoItem(
-    label: String,
-    value: String
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.LightGray,
-            fontWeight = FontWeight.Medium
-        )
-    }
-}
-
-/**
- * 能力值項目組件
- */
-@Composable
-private fun StatItem(
-    name: String,
-    value: Int,
-    maxValue: Int = 300,
-    color: Color = Color(0xFF4CAF50)
-) {
-    val progress = (value.toFloat() / maxValue).coerceIn(0f, 1f)
-    val textOnRight = progress < 0.2f
-    
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // 能力名稱
-        Text(
-            text = name,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.width(48.dp)
-        )
-        
-        // 進度條容器
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .height(24.dp)
-        ) {
-            // 背景條（白色）
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(50))
-                    .background(Color.White)
-            )
-
-            // 進度條
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(fraction = progress)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(50))
-                    .background(color)
-            )
-            
-            // 數值文本
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (textOnRight) {
-                    // 進度條區域（佔位）
-                    Spacer(modifier = Modifier.fillMaxWidth(fraction = progress))
-                    
-                    // 文本在右邊（空白區域），黑色
-                    Text(
-                        text = "$value/$maxValue",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Black,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                } else {
-                    // 文本在左邊（進度條內），白色
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = progress)
-                            .fillMaxSize()
-                    ) {
-                        Text(
-                            text = "$value/$maxValue",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(end = 4.dp)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
