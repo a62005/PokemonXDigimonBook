@@ -19,15 +19,11 @@ class PokemonViewModel(
 
     override val uiState: StateFlow<PokemonUiState> = _uiState.asStateFlow()
 
-    private var currentMaxId = 0
 
     init {
         viewModelScope.launch {
             repository.observePokemonList().collect { list ->
                 _uiState.update { it.copy(pokemonList = list) }
-                if (list.isNotEmpty()) {
-                    currentMaxId = list.maxOf { it.id }
-                }
             }
         }
     }
@@ -44,9 +40,9 @@ class PokemonViewModel(
         
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingMore = true, error = null) }
-            
-            val nextId = currentMaxId + 1
-            val result = repository.loadMorePokemon(startId = nextId, count = 20)
+
+            val offset = _uiState.value.pokemonList.size
+            val result = repository.loadMorePokemon(offset)
             if (result.hasError) {
                 _uiState.update { it.copy(error = result.error?.message) }
             }

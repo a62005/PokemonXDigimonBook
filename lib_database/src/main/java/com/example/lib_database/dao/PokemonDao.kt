@@ -17,6 +17,9 @@ abstract class PokemonDao: BaseDao<PokemonEntity>() {
     
     @Query("SELECT * FROM PokemonEntity WHERE id = :id")
     abstract suspend fun getPokemonById(id: Int): PokemonEntity?
+
+    @Query("SELECT * FROM PokemonEntity WHERE name = :name")
+    abstract suspend fun getPokemonByName(name: String): PokemonEntity?
     
     @Query("SELECT * FROM PokemonEntity WHERE id = :id")
     abstract fun observePokemonById(id: Int): Flow<PokemonEntity?>

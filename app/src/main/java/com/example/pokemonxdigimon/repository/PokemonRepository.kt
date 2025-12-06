@@ -1,10 +1,11 @@
 package com.example.pokemonxdigimon.repository
 
 import com.example.lib_database.AppDatabase
+import com.example.lib_database.entity.PokemonEntity
 import com.example.lib_database.entity.SimplePokemonBean
+import com.example.lib_database.entity.Stat
 import com.example.network.data.ApiResponseData
 import com.example.pokemonxdigimon.manager.NetworkManager
-import com.example.pokemonxdigimon.mapper.PokemonMapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -29,28 +30,55 @@ class PokemonRepository(
         withContext(ioDispatcher) {
             val localSize = pokemonDao.getSize()
             if (localSize == 0) {
-                loadMorePokemon(1)
+                loadMorePokemon(0)
             }
         }
     }
     
-    suspend fun loadMorePokemon(startId: Int, count: Int = PAGE_SIZE): ApiResponseData<Unit> {
+    suspend fun loadMorePokemon(offset: Int): ApiResponseData<Unit> {
         return withContext(ioDispatcher) {
-            for (id in startId until (startId + count)) {
-                // 檢查是否已存在
-                val existing = pokemonDao.getPokemonById(id)
-                if (existing == null) {
-                    val response = networkManager.getPokemonById(id)
-                    if (response.hasError) {
-                        return@withContext ApiResponseData(
-                            data = null,
-                            hasError = true,
-                            error = response.error
-                        )
-                    }
-                    response.data?.let { detail ->
-                        val entity = PokemonMapper.toEntity(detail)
-                        pokemonDao.insert(entity)
+            // 獲取 Pokemon 列表
+            val listResponse = networkManager.getPokemonList(offset = offset, limit = PAGE_SIZE)
+            
+            if (listResponse.hasError) {
+                return@withContext ApiResponseData(
+                    data = null,
+                    hasError = true,
+                    error = listResponse.error
+                )
+            }
+
+            listResponse.data?.let { data ->
+                // 根據 results 中的 URL 獲取每個 Pokemon 的詳細資料
+                for (pokemonResult in data.results) {
+                    val name = pokemonResult.name
+                    val existing = pokemonDao.getPokemonByName(pokemonResult.name)
+                    if (existing == null) {
+                        val detailResponse = networkManager.getPokemonByName(name)
+                        if (detailResponse.hasError) {
+                            return@withContext ApiResponseData(
+                                data = null,
+                                hasError = true,
+                                error = detailResponse.error
+                            )
+                        }
+                        detailResponse.data?.let { detail ->
+                            val entity = PokemonEntity(
+                                id = detail.id,
+                                name = detail.name,
+                                height = detail.height,
+                                weight = detail.weight,
+                                types = detail.types.map { it.type.name },
+                                stat = Stat(
+                                    hp = detail.stats.find { it.stat.name == "hp" }?.baseStat ?: 0,
+                                    attack = detail.stats.find { it.stat.name == "attack" }?.baseStat ?: 0,
+                                    defense = detail.stats.find { it.stat.name == "defense" }?.baseStat ?: 0,
+                                    speed = detail.stats.find { it.stat.name == "speed" }?.baseStat ?: 0,
+                                    exp = detail.baseExperience
+                                )
+                            )
+                            pokemonDao.insert(entity)
+                        }
                     }
                 }
             }
