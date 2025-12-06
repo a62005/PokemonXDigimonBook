@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -224,6 +225,47 @@ private fun PokemonDetailScreenContent(
                             value = "${pokemon.heightInM} M"
                         )
                     }
+                    
+                    // Base Stats 標題
+                    Text(
+                        text = stringResource(R.string.base_stats),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 32.dp, bottom = 16.dp)
+                    )
+                    
+                    // 能力值列表
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 32.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        StatItem(
+                            name = stringResource(R.string.hp),
+                            value = pokemon.stat.hp
+                        )
+                        StatItem(
+                            name = stringResource(R.string.attack),
+                            value = pokemon.stat.attack
+                        )
+                        StatItem(
+                            name = stringResource(R.string.defense),
+                            value = pokemon.stat.defense
+                        )
+                        StatItem(
+                            name = stringResource(R.string.speed),
+                            value = pokemon.stat.speed
+                        )
+                        StatItem(
+                            name = stringResource(R.string.exp),
+                            value = pokemon.stat.exp
+                        )
+                    }
                 }
             }
         }
@@ -252,8 +294,97 @@ private fun InfoItem(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            color = Color.LightGray, // 鐵灰色
+            color = Color.LightGray,
             fontWeight = FontWeight.Medium
         )
+    }
+}
+
+/**
+ * 能力值項目組件
+ */
+@Composable
+private fun StatItem(
+    name: String,
+    value: Int,
+    maxValue: Int = 300
+) {
+    val progress = (value.toFloat() / maxValue).coerceIn(0f, 1f)
+    // 如果進度小於 20%，文本放右邊（空白區域）
+    val textOnRight = progress < 0.2f
+    
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // 能力名稱
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.White,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.width(48.dp)
+        )
+        
+        // 進度條容器
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(24.dp)
+        ) {
+            // 背景條（白色）
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White)
+            )
+
+            // 進度條
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = progress)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(50))
+                    .background(Color(0xFF4CAF50))
+            )
+            
+            // 數值文本
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (textOnRight) {
+                    // 進度條區域（佔位）
+                    Spacer(modifier = Modifier.fillMaxWidth(fraction = progress))
+                    
+                    // 文本在右邊（空白區域），黑色
+                    Text(
+                        text = "$value/$maxValue",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                } else {
+                    // 文本在左邊（進度條內），白色
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = progress)
+                            .fillMaxSize()
+                    ) {
+                        Text(
+                            text = "$value/$maxValue",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
     }
 }
