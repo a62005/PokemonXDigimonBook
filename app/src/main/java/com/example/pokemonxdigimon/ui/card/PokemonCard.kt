@@ -1,4 +1,4 @@
-package com.example.pokemonxdigimon.ui.component
+package com.example.pokemonxdigimon.ui.card
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -110,19 +110,20 @@ fun PokemonCard(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun PokemonCardPreview() {
     PokemonXDigimonTheme {
-//        PokemonCard(
-//            simplePokemonBean = SimplePokemonBean(
-//                id = 25,
-//                name = "Pikachu",
-//                types = listOf("electric")
-//            ),
-//            {},
-//            null,
-//            null
-//        )
+        PokemonCard(
+            simplePokemonBean = SimplePokemonBean(
+                id = 25,
+                name = "Pikachu",
+                types = listOf("electric")
+            ),
+            {},
+            null,
+            null
+        )
     }
 }

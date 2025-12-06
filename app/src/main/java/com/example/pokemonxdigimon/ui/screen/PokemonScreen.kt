@@ -31,7 +31,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.R
@@ -39,8 +38,7 @@ import com.example.pokemonxdigimon.base.BaseIntent
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonUiState
-import com.example.pokemonxdigimon.ui.component.PokemonCard
-import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
+import com.example.pokemonxdigimon.ui.card.PokemonCard
 import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel

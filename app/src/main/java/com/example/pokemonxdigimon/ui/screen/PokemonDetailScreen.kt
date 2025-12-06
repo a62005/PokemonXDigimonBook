@@ -5,15 +5,21 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +41,7 @@ import coil.compose.AsyncImage
 import com.example.lib_database.entity.PokemonEntity
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonDetailIntent
+import com.example.pokemonxdigimon.ui.item.TypeItem
 import com.example.pokemonxdigimon.utils.ColorUtils
 import com.example.pokemonxdigimon.viewmodel.PokemonDetailViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -70,7 +77,7 @@ fun PokemonDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                androidx.compose.material3.CircularProgressIndicator()
+                CircularProgressIndicator()
             }
         }
         uiState.pokemon != null -> {
@@ -97,12 +104,13 @@ private fun PokemonDetailScreenContent(
     val imageUrl = pokemon.imageUrl
     
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.DarkGray)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
         ) {
             // 有顏色的背景區域（帶圓角）
             Box(
@@ -113,7 +121,9 @@ private fun PokemonDetailScreenContent(
                     .background(backgroundColor)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
                 ) {
                     // 返回按鈕
                     IconButton(
@@ -135,12 +145,12 @@ private fun PokemonDetailScreenContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
-                                .padding(32.dp)
+                                .padding(12.dp)
                                 .sharedElement(
                                     sharedContentState = rememberSharedContentState(key = "pokemon-image-${pokemon.id}"),
                                     animatedVisibilityScope = animatedContentScope
                                 ),
-                            contentScale = ContentScale.Fit
+                            contentScale = ContentScale.FillHeight
                         )
                     }
                 }
@@ -151,12 +161,11 @@ private fun PokemonDetailScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
-                    .background(Color.Black)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(32.dp)
+                        .padding(16.dp)
                 ) {
                     with(sharedTransitionScope) {
                         // Pokemon 名稱
@@ -165,7 +174,7 @@ private fun PokemonDetailScreenContent(
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
-                            fontSize = 48.sp,
+                            fontSize = 32.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -179,16 +188,70 @@ private fun PokemonDetailScreenContent(
                         )
                     }
                     
-                    // 其他詳細資訊
-                    Text(
-                        text = "詳細資訊區域",
+                    // TYPE 列表
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp),
-                        textAlign = TextAlign.Center
-                    )
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        pokemon.types.forEachIndexed { index, type ->
+                            TypeItem(type = type)
+                            if (index < pokemon.types.size - 1) {
+                                Spacer(modifier = Modifier.width(16.dp))
+                            }
+                        }
+                    }
+                    
+                    // 身高體重
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 26.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        // 體重
+                        InfoItem(
+                            label = "體重",
+                            value = "${pokemon.weight / 10.0} KG"
+                        )
+                        
+                        // 身高
+                        InfoItem(
+                            label = "身高",
+                            value = "${pokemon.height / 10.0} M"
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+
+/**
+ * 資訊項目組件（身高/體重）
+ */
+@Composable
+private fun InfoItem(
+    label: String,
+    value: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = value,
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.LightGray, // 鐵灰色
+            fontWeight = FontWeight.Medium
+        )
     }
 }
