@@ -45,6 +45,7 @@ import com.example.pokemonxdigimon.R
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonDetailIntent
 import com.example.pokemonxdigimon.ui.item.TypeItem
+import com.example.pokemonxdigimon.ui.model.StatConfigs
 import com.example.pokemonxdigimon.utils.ColorUtils
 import com.example.pokemonxdigimon.viewmodel.PokemonDetailViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -242,29 +243,16 @@ private fun PokemonDetailScreenContent(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 32.dp),
+                            .padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        StatItem(
-                            name = stringResource(R.string.hp),
-                            value = pokemon.stat.hp
-                        )
-                        StatItem(
-                            name = stringResource(R.string.attack),
-                            value = pokemon.stat.attack
-                        )
-                        StatItem(
-                            name = stringResource(R.string.defense),
-                            value = pokemon.stat.defense
-                        )
-                        StatItem(
-                            name = stringResource(R.string.speed),
-                            value = pokemon.stat.speed
-                        )
-                        StatItem(
-                            name = stringResource(R.string.exp),
-                            value = pokemon.stat.exp
-                        )
+                        StatConfigs.defaultStats.forEach { statConfig ->
+                            StatItem(
+                                name = stringResource(statConfig.nameResId),
+                                value = statConfig.getValue(pokemon.stat),
+                                color = statConfig.color
+                            )
+                        }
                     }
                 }
             }
@@ -307,10 +295,10 @@ private fun InfoItem(
 private fun StatItem(
     name: String,
     value: Int,
-    maxValue: Int = 300
+    maxValue: Int = 300,
+    color: Color = Color(0xFF4CAF50)
 ) {
     val progress = (value.toFloat() / maxValue).coerceIn(0f, 1f)
-    // 如果進度小於 20%，文本放右邊（空白區域）
     val textOnRight = progress < 0.2f
     
     Row(
@@ -346,7 +334,7 @@ private fun StatItem(
                     .fillMaxWidth(fraction = progress)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(Color(0xFF4CAF50))
+                    .background(color)
             )
             
             // 數值文本
@@ -363,7 +351,7 @@ private fun StatItem(
                         text = "$value/$maxValue",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Black,
-                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
                         modifier = Modifier.padding(start = 4.dp)
                     )
                 } else {
@@ -377,7 +365,7 @@ private fun StatItem(
                             text = "$value/$maxValue",
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.White,
-                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
                                 .padding(end = 4.dp)
