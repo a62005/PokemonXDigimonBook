@@ -16,13 +16,22 @@ class PokemonRepository(
 ) {
 
     companion object {
-        private const val PAGE_SIZE = 20
+        private const val PAGE_SIZE = 30
     }
     
     private val pokemonDao = database.pokemonDao()
     
     fun observePokemonList(): Flow<List<SimplePokemonBean>> {
         return pokemonDao.observeSimplePokemonList()
+    }
+
+    suspend fun initPokemonData() {
+        withContext(ioDispatcher) {
+            val localSize = pokemonDao.getSize()
+            if (localSize == 0) {
+                loadMorePokemon(1)
+            }
+        }
     }
     
     suspend fun loadMorePokemon(startId: Int, count: Int = PAGE_SIZE): ApiResponseData<Unit> {

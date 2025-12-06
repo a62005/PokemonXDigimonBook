@@ -5,7 +5,6 @@ import com.example.pokemonxdigimon.base.BaseUiState
 
 data class PokemonUiState(
     val pokemonList: List<SimplePokemonBean> = emptyList(),
-    val isInitialLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val hasMore: Boolean = true,
     override var error: String? = null

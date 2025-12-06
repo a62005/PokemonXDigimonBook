@@ -120,7 +120,7 @@ private fun PokemonScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (uiState.isInitialLoading && uiState.pokemonList.isEmpty()) {
+            if (uiState.pokemonList.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center

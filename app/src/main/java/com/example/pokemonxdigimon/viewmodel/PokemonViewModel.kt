@@ -30,29 +30,12 @@ class PokemonViewModel(
                 }
             }
         }
-        handleIntent(PokemonIntent.LoadInitialData)
     }
 
     override fun handleIntent(intent: BaseIntent?) {
         when (intent) {
-            is PokemonIntent.LoadInitialData -> loadInitialData()
             is PokemonIntent.LoadMoreData -> loadMoreData()
             else -> clearError()
-        }
-    }
-
-    private fun loadInitialData() {
-        if (_uiState.value.isInitialLoading) return
-        
-        viewModelScope.launch {
-            _uiState.update { it.copy(isInitialLoading = true, error = null) }
-            
-            val result = repository.loadMorePokemon(startId = 1, count = 20)
-            if (result.hasError) {
-                _uiState.update { it.copy(error = result.error?.message) }
-            }
-            
-            _uiState.update { it.copy(isInitialLoading = false) }
         }
     }
 
