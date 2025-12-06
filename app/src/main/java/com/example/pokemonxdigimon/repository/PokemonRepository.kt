@@ -8,6 +8,7 @@ import com.example.network.data.ApiResponseData
 import com.example.pokemonxdigimon.manager.NetworkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PokemonRepository(
@@ -21,6 +22,8 @@ class PokemonRepository(
     }
     
     private val pokemonDao = database.pokemonDao()
+    var maxCount = 0
+        private set
     
     fun observePokemonList(): Flow<List<SimplePokemonBean>> {
         return pokemonDao.observeSimplePokemonList()
@@ -28,10 +31,21 @@ class PokemonRepository(
 
     suspend fun initPokemonData() {
         withContext(ioDispatcher) {
-            val localSize = pokemonDao.getSize()
-            if (localSize == 0) {
-                loadMorePokemon(0)
+            launch {
+                setMaxCount()
             }
+            launch {
+                val localSize = pokemonDao.getSize()
+                if (localSize == 0) {
+                    loadMorePokemon(0)
+                }
+            }
+        }
+    }
+
+    private suspend fun setMaxCount() {
+        networkManager.getPokemonCount().data?.let {
+            maxCount = it
         }
     }
     

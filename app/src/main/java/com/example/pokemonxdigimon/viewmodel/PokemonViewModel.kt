@@ -23,7 +23,16 @@ class PokemonViewModel(
     init {
         viewModelScope.launch {
             repository.observePokemonList().collect { list ->
-                _uiState.update { it.copy(pokemonList = list) }
+                _uiState.update {
+                    if (list.size >= repository.maxCount) {
+                        it.copy(
+                            pokemonList = list,
+                            hasMore = false
+                        )
+                    } else {
+                        it.copy(pokemonList = list)
+                    }
+                }
             }
         }
     }

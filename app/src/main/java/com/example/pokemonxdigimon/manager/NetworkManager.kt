@@ -25,4 +25,13 @@ class NetworkManager(
         val response = pokemonClient.sendRequest { pokemonApi.getPokemonList(offset, limit) }
         return response
     }
+
+    suspend fun getPokemonCount(): ApiResponseData<Int> {
+        val response = pokemonClient.sendRequest { pokemonApi.getPokemonList(limit = 1) }
+        return ApiResponseData(
+            data = response.data?.count,
+            hasError = response.hasError,
+            error = response.error
+        )
+    }
 }
