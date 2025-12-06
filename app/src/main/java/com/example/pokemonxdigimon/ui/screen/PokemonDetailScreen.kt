@@ -33,12 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lib_database.entity.PokemonEntity
+import com.example.pokemonxdigimon.R
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonDetailIntent
 import com.example.pokemonxdigimon.ui.item.TypeItem
@@ -212,14 +214,14 @@ private fun PokemonDetailScreenContent(
                     ) {
                         // 體重
                         InfoItem(
-                            label = "體重",
-                            value = "${pokemon.weight / 10.0} KG"
+                            label = stringResource(R.string.weight),
+                            value = "${pokemon.weightInKg} KG"
                         )
                         
                         // 身高
                         InfoItem(
-                            label = "身高",
-                            value = "${pokemon.height / 10.0} M"
+                            label = stringResource(R.string.height),
+                            value = "${pokemon.heightInM} M"
                         )
                     }
                 }

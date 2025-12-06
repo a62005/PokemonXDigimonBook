@@ -20,6 +20,12 @@ data class PokemonEntity(
 
     val imageUrl: String
         get() = getImageUrl(id)
+    
+    val weightInKg: Double
+        get() = weight / 10.0
+    
+    val heightInM: Double
+        get() = height / 10.0
 }
 
 data class Stat(
