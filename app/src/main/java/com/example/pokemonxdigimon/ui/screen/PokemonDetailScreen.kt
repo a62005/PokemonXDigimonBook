@@ -19,6 +19,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,10 +32,35 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.utils.ColorUtils
+import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PokemonDetailScreen(
+    pokemonId: Int,
+    onBackClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedVisibilityScope
+) {
+    val pokemonViewModel: PokemonViewModel = koinViewModel()
+    val uiState by pokemonViewModel.uiState.collectAsState()
+    
+    val pokemon = uiState.pokemonList.find { it.id == pokemonId }
+    
+    pokemon?.let {
+        PokemonDetailScreenContent(
+            pokemon = it,
+            onBackClick = onBackClick,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = animatedContentScope
+        )
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun PokemonDetailScreenContent(
     pokemon: SimplePokemonBean,
     onBackClick: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,

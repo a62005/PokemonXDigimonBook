@@ -2,95 +2,43 @@ package com.example.pokemonxdigimon.ui.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.pokemonxdigimon.ui.screen.DigimonScreen
-import com.example.pokemonxdigimon.ui.screen.HomeScreen
-import com.example.pokemonxdigimon.ui.screen.PokemonDetailScreen
-import com.example.pokemonxdigimon.ui.screen.PokemonScreen
-import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
-import org.koin.androidx.compose.koinViewModel
 
+/**
+ * 通用導航圖
+ * 只負責畫面切換，動畫和內容由外部定義
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: String,
+    destinations: List<NavDestination>
 ) {
     SharedTransitionLayout {
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = startDestination
         ) {
-            composable(
-                route = Screen.Home.route,
-                exitTransition = { slideOutHorizontally { -it } + fadeOut() },
-                popEnterTransition = { slideInHorizontally { -it } + fadeIn() }
-            ) {
-                HomeScreen(
-                    onPokemonClick = { navController.navigate(Screen.Pokemon.route) },
-                    onDigimonClick = { navController.navigate(Screen.Digimon.route) }
-                )
-            }
-
-            composable(
-                route = Screen.Pokemon.route,
-                enterTransition = { slideInHorizontally { it } + fadeIn() },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { slideOutHorizontally { it } + fadeOut() }
-            ) {
-                val pokemonViewModel: PokemonViewModel = koinViewModel()
-                val uiState by pokemonViewModel.uiState.collectAsState()
-
-                PokemonScreen(
-                    uiState = uiState,
-                    onIntent = pokemonViewModel::handleIntent,
-                    onPokemonClick = { pokemon ->
-                        navController.navigate(Screen.PokemonDetail.createRoute(pokemon.id))
-                    },
-                    onBackClick = { navController.popBackStack() },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedContentScope = this@composable
-                )
-            }
-
-            composable(
-                route = Screen.PokemonDetail.route,
-                enterTransition = { null },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { null }
-            ) { backStackEntry ->
-                val pokemonId = backStackEntry.arguments?.getString("pokemonId")?.toIntOrNull()
-                val pokemonViewModel: PokemonViewModel = koinViewModel()
-                val uiState by pokemonViewModel.uiState.collectAsState()
-
-                val pokemon = uiState.pokemonList.find { it.id == pokemonId }
-
-                pokemon?.let {
-                    PokemonDetailScreen(
-                        pokemon = it,
-                        onBackClick = { navController.popBackStack() },
-                        sharedTransitionScope = this@SharedTransitionLayout,
-                        animatedContentScope = this@composable
-                    )
+            destinations.forEach { destination ->
+                composable(
+                    route = destination.route,
+                    enterTransition = destination.enterTransition,
+                    exitTransition = destination.exitTransition,
+                    popEnterTransition = destination.popEnterTransition,
+                    popExitTransition = destination.popExitTransition
+                ) { backStackEntry ->
+                    CompositionLocalProvider(
+                        LocalSharedTransitionScope provides this@SharedTransitionLayout,
+                        LocalAnimatedVisibilityScope provides this@composable
+                    ) {
+                        destination.content(backStackEntry)
+                    }
                 }
-            }
-
-            composable(
-                route = Screen.Digimon.route,
-                enterTransition = { slideInHorizontally { it } + fadeIn() },
-                popExitTransition = { slideOutHorizontally { it } + fadeOut() }
-            ) {
-                DigimonScreen(onBackClick = { navController.popBackStack() })
             }
         }
     }

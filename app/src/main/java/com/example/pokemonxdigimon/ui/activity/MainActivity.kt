@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.pokemonxdigimon.ui.navigation.NavGraph
+import com.example.pokemonxdigimon.ui.navigation.AppNavigation
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
 import com.example.pokemonxdigimon.viewmodel.MainViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -32,7 +32,7 @@ fun MainContent() {
     PokemonXDigimonTheme {
         val navController = rememberNavController()
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            NavGraph(navController = navController)
+            AppNavigation(navController = navController)
         }
     }
 }

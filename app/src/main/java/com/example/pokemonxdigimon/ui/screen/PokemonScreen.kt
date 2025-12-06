@@ -25,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,11 +41,34 @@ import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonUiState
 import com.example.pokemonxdigimon.ui.component.PokemonCard
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
+import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PokemonScreen(
+    onPokemonClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedVisibilityScope
+) {
+    val pokemonViewModel: PokemonViewModel = koinViewModel()
+    val uiState by pokemonViewModel.uiState.collectAsState()
+    
+    PokemonScreenContent(
+        uiState = uiState,
+        onIntent = pokemonViewModel::handleIntent,
+        onBackClick = onBackClick,
+        onPokemonClick = { pokemon -> onPokemonClick(pokemon.id) },
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+private fun PokemonScreenContent(
     uiState: PokemonUiState,
     onIntent: (BaseIntent?) -> Unit,
     onBackClick: () -> Unit,
@@ -140,25 +165,5 @@ fun PokemonScreen(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PokemonScreenPreview() {
-    val simplePokemonBeanLists = listOf(
-        SimplePokemonBean(1, "Bulbasaur", listOf("grass", "poison")),
-        SimplePokemonBean(2, "Ivysaur", listOf("grass", "poison")),
-        SimplePokemonBean(3, "Venusaur", listOf("grass", "poison")),
-        SimplePokemonBean(4, "Charmander", listOf("fire"))
-    )
-    
-    PokemonXDigimonTheme {
-//        PokemonScreen(
-//            uiState = PokemonUiState(pokemonList = simplePokemonBeanLists),
-//            onIntent = {},
-//            onBackClick = {},
-//            onPokemonClick = {}
-//        )
     }
 }
