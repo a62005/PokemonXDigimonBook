@@ -1,5 +1,9 @@
 package com.example.pokemonxdigimon.ui.component
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,11 +29,18 @@ import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
 import com.example.pokemonxdigimon.utils.ColorUtils
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PokemonCard(simplePokemonBean: SimplePokemonBean) {
+fun PokemonCard(
+    simplePokemonBean: SimplePokemonBean,
+    onClick: () -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedVisibilityScope? = null
+) {
     val backgroundColor = Color(ColorUtils.getTypeColor(simplePokemonBean.mainType))
     
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f),
@@ -43,24 +54,58 @@ fun PokemonCard(simplePokemonBean: SimplePokemonBean) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            AsyncImage(
-                model = simplePokemonBean.imageUrl,
-                contentDescription = simplePokemonBean.name,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(8.dp),
-                contentScale = ContentScale.Fit
-            )
-            Text(
-                text = simplePokemonBean.name,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = Color.White,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+            if (sharedTransitionScope != null && animatedContentScope != null) {
+                with(sharedTransitionScope) {
+                    AsyncImage(
+                        model = simplePokemonBean.imageUrl,
+                        contentDescription = simplePokemonBean.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp)
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "pokemon-image-${simplePokemonBean.id}"),
+                                animatedVisibilityScope = animatedContentScope
+                            ),
+                        contentScale = ContentScale.Fit
+                    )
+                    Text(
+                        text = simplePokemonBean.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .sharedBounds(
+                                sharedContentState = rememberSharedContentState(key = "pokemon-name-${simplePokemonBean.id}"),
+                                animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 300)
+                                }
+                            )
+                    )
+                }
+            } else {
+                AsyncImage(
+                    model = simplePokemonBean.imageUrl,
+                    contentDescription = simplePokemonBean.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp),
+                    contentScale = ContentScale.Fit
+                )
+                Text(
+                    text = simplePokemonBean.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
@@ -69,12 +114,15 @@ fun PokemonCard(simplePokemonBean: SimplePokemonBean) {
 @Composable
 fun PokemonCardPreview() {
     PokemonXDigimonTheme {
-        PokemonCard(
-            simplePokemonBean = SimplePokemonBean(
-                id = 25,
-                name = "Pikachu",
-                types = listOf("electric")
-            )
-        )
+//        PokemonCard(
+//            simplePokemonBean = SimplePokemonBean(
+//                id = 25,
+//                name = "Pikachu",
+//                types = listOf("electric")
+//            ),
+//            {},
+//            null,
+//            null
+//        )
     }
 }

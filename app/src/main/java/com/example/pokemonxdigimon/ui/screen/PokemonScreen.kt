@@ -1,5 +1,8 @@
 package com.example.pokemonxdigimon.ui.screen
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,12 +41,15 @@ import com.example.pokemonxdigimon.ui.component.PokemonCard
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PokemonScreen(
     uiState: PokemonUiState,
     onIntent: (BaseIntent?) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onPokemonClick: (SimplePokemonBean) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedVisibilityScope
 ) {
     val listState = rememberLazyGridState()
     
@@ -111,7 +117,12 @@ fun PokemonScreen(
                         items = uiState.pokemonList,
                         key = { _, pokemon -> pokemon.id }
                     ) { _, pokemon ->
-                        PokemonCard(simplePokemonBean = pokemon)
+                        PokemonCard(
+                            simplePokemonBean = pokemon,
+                            onClick = { onPokemonClick(pokemon) },
+                            sharedTransitionScope = sharedTransitionScope,
+                            animatedContentScope = animatedContentScope
+                        )
                     }
 
                     if (uiState.isLoadingMore) {
@@ -143,10 +154,11 @@ fun PokemonScreenPreview() {
     )
     
     PokemonXDigimonTheme {
-        PokemonScreen(
-            uiState = PokemonUiState(pokemonList = simplePokemonBeanLists),
-            onIntent = {},
-            onBackClick = {}
-        )
+//        PokemonScreen(
+//            uiState = PokemonUiState(pokemonList = simplePokemonBeanLists),
+//            onIntent = {},
+//            onBackClick = {},
+//            onPokemonClick = {}
+//        )
     }
 }
