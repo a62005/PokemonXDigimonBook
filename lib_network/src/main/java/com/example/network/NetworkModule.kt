@@ -12,11 +12,11 @@ internal val networkModule = module {
             .enableLog(BuildConfig.DEBUG)
             .build()
     }
-//    single<IHttpClient>(named("digimon")) {
-//        val baseUrl = BuildConfig.POKEMON_BASE_URL
-//        HttpClientImp.Builder(baseUrl)
-//            .setTimeout(1000L)
-//            .enableLog(BuildConfig.DEBUG_MODE)
-//            .build()
-//    }
+    single<IHttpClient>(named("digimon")) {
+        val baseUrl = BuildConfig.DIGIMON_BASE_URL
+        HttpClientImp.Builder(baseUrl)
+            .setTimeout(1000L)
+            .enableLog(BuildConfig.DEBUG)
+            .build()
+    }
 }
