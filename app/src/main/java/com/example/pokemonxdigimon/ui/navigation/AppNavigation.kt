@@ -3,6 +3,7 @@ package com.example.pokemonxdigimon.ui.navigation
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.example.pokemonxdigimon.ui.screen.DigimonDetailScreen
 import com.example.pokemonxdigimon.ui.screen.DigimonScreen
 import com.example.pokemonxdigimon.ui.screen.HomeScreen
 import com.example.pokemonxdigimon.ui.screen.PokemonDetailScreen
@@ -79,11 +80,32 @@ fun AppNavigation(navController: NavHostController) {
                 popExitTransition = NavTransitions.slideOutToRight,
                 content = {
                     DigimonScreen(
-                        onDigimonClick = {},
+                        onDigimonClick = { digimon ->
+                            navController.navigate(Screen.DigimonDetail.createRoute(digimon.id))
+                        },
                         onBackClick = { navController.popBackStack() },
                         sharedTransitionScope = getSharedTransitionScope(),
                         animatedContentScope = getAnimatedVisibilityScope()
                     )
+                }
+            ),
+            
+            // Digimon 詳情頁面
+            NavDestination(
+                route = Screen.DigimonDetail.route,
+                enterTransition = NavTransitions.noTransition,
+                exitTransition = NavTransitions.noExitTransition,
+                popEnterTransition = NavTransitions.noTransition,
+                popExitTransition = NavTransitions.noExitTransition,
+                content = { backStackEntry ->
+                    backStackEntry.arguments?.getString("digimonId")?.toIntOrNull()?.let { digimonId ->
+                        DigimonDetailScreen(
+                            digimonId = digimonId,
+                            onBackClick = { navController.popBackStack() },
+                            sharedTransitionScope = getSharedTransitionScope(),
+                            animatedContentScope = getAnimatedVisibilityScope()
+                        )
+                    }
                 }
             )
         )

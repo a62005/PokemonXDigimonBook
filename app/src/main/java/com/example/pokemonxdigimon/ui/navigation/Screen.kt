@@ -7,8 +7,7 @@ sealed class Screen(val route: String) {
         fun createRoute(pokemonId: Int) = "pokemon/$pokemonId"
     }
     data object Digimon : Screen("digimon")
-    data object DigimonDetail : Screen("digimon/{digimonId}/{digimonName}/{digimonImageUrl}/{digimonType}") {
-        fun createRoute(digimonId: Int, digimonName: String, digimonImageUrl: String, digimonType: String) = 
-            "digimon/$digimonId/$digimonName/$digimonImageUrl/$digimonType"
+    data object DigimonDetail : Screen("digimon/{digimonId}") {
+        fun createRoute(digimonId: Int) = "digimon/$digimonId"
     }
 }

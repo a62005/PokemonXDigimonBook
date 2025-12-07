@@ -24,7 +24,7 @@ class DigimonDetailViewModel(
     }
 
     /**
-     * 載入 Pokemon 詳細資訊
+     * 載入 Digimon 詳細資訊
      * 本地一定有資料，直接監聽資料庫變化
      */
     private fun loadDigimonDetail(id: Int) {

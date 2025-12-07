@@ -1,7 +1,6 @@
 package com.example.pokemonxdigimon.mvi.state
 
 import com.example.lib_database.entity.DigimonEntity
-import com.example.lib_database.entity.PokemonEntity
 import com.example.pokemonxdigimon.base.BaseUiState
 
 data class DigimonDetailUiState(
