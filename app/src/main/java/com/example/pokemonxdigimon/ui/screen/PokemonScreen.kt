@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -35,13 +36,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.lib_database.bean.ISimpleBean
+import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.R
 import com.example.pokemonxdigimon.base.BaseIntent
 import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
-import com.example.pokemonxdigimon.mvi.state.ListDataUiState
-import com.example.pokemonxdigimon.ui.card.ListDataCard
+import com.example.pokemonxdigimon.mvi.state.PokemonUiState
+import com.example.pokemonxdigimon.ui.card.PokemonCard
 import com.example.pokemonxdigimon.utils.ClickUtils
 import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -49,20 +50,20 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun ListScreen(
-    onItemClick: (Int) -> Unit,
+fun PokemonScreen(
+    onPokemonClick: (Int) -> Unit,
     onBackClick: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedVisibilityScope
 ) {
     val pokemonViewModel: PokemonViewModel = koinViewModel()
     val uiState by pokemonViewModel.uiState.collectAsState()
-
-    ListScreenContent(
+    
+    PokemonScreenContent(
         uiState = uiState,
         onIntent = pokemonViewModel::handleIntent,
         onBackClick = onBackClick,
-        onItemClick = { pokemon -> onItemClick(pokemon.id) },
+        onPokemonClick = { pokemon -> onPokemonClick(pokemon.id) },
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope
     )
@@ -70,11 +71,11 @@ fun ListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ListScreenContent(
-    uiState: ListDataUiState,
+private fun PokemonScreenContent(
+    uiState: PokemonUiState,
     onIntent: (BaseIntent?) -> Unit,
     onBackClick: () -> Unit,
-    onItemClick: (ISimpleBean) -> Unit,
+    onPokemonClick: (SimplePokemonBean) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedVisibilityScope
 ) {
@@ -87,7 +88,7 @@ private fun ListScreenContent(
     )
 
     // 監聽列表變化和滾動位置，觸發載入更多
-    LaunchedEffect(uiState.dataList.size, uiState.isLoadingMore) {
+    LaunchedEffect(uiState.pokemonList.size, uiState.isLoadingMore) {
         snapshotFlow {
             val layoutInfo = listState.layoutInfo
             val totalItems = layoutInfo.totalItemsCount
@@ -130,7 +131,7 @@ private fun ListScreenContent(
                 .background(Color.DarkGray)
                 .padding(paddingValues)
         ) {
-            if (uiState.dataList.isEmpty()) {
+            if (uiState.pokemonList.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -148,12 +149,12 @@ private fun ListScreenContent(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     itemsIndexed(
-                        items = uiState.dataList,
-                        key = { _, data -> data.id }
+                        items = uiState.pokemonList,
+                        key = { _, pokemon -> pokemon.id }
                     ) { _, pokemon ->
-                        ListDataCard(
-                            bean = pokemon,
-                            onClick = { onItemClick(pokemon) },
+                        PokemonCard(
+                            simplePokemonBean = pokemon,
+                            onClick = { onPokemonClick(pokemon) },
                             sharedTransitionScope = sharedTransitionScope,
                             animatedContentScope = animatedContentScope
                         )

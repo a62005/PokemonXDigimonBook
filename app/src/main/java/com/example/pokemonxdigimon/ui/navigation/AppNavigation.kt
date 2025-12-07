@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import com.example.pokemonxdigimon.ui.screen.DigimonDetailScreen
 import com.example.pokemonxdigimon.ui.screen.DigimonScreen
 import com.example.pokemonxdigimon.ui.screen.HomeScreen
-import com.example.pokemonxdigimon.ui.screen.ListScreen
 import com.example.pokemonxdigimon.ui.screen.PokemonDetailScreen
+import com.example.pokemonxdigimon.ui.screen.PokemonScreen
 
 /**
  * 應用程式導航配置
@@ -32,7 +32,7 @@ fun AppNavigation(navController: NavHostController) {
                     )
                 }
             ),
-
+            
             // Pokemon 列表頁面
             NavDestination(
                 route = Screen.Pokemon.route,
@@ -41,8 +41,8 @@ fun AppNavigation(navController: NavHostController) {
                 popEnterTransition = NavTransitions.noTransition,
                 popExitTransition = NavTransitions.slideOutToRight,
                 content = {
-                    ListScreen(
-                        onItemClick = { pokemonId ->
+                    PokemonScreen(
+                        onPokemonClick = { pokemonId ->
                             navController.navigate(Screen.PokemonDetail.createRoute(pokemonId))
                         },
                         onBackClick = { navController.popBackStack() },
@@ -51,7 +51,7 @@ fun AppNavigation(navController: NavHostController) {
                     )
                 }
             ),
-
+            
             // Pokemon 詳情頁面
             NavDestination(
                 route = Screen.PokemonDetail.route,
@@ -70,7 +70,7 @@ fun AppNavigation(navController: NavHostController) {
                     }
                 }
             ),
-
+            
             // Digimon 列表頁面
             NavDestination(
                 route = Screen.Digimon.route,
@@ -89,7 +89,7 @@ fun AppNavigation(navController: NavHostController) {
                     )
                 }
             ),
-
+            
             // Digimon 詳情頁面
             NavDestination(
                 route = Screen.DigimonDetail.route,
