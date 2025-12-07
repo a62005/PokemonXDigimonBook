@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -49,6 +47,7 @@ import com.example.pokemonxdigimon.ui.item.InfoItem
 import com.example.pokemonxdigimon.ui.item.StatItem
 import com.example.pokemonxdigimon.ui.item.TypeItem
 import com.example.pokemonxdigimon.ui.model.StatConfigs
+import com.example.pokemonxdigimon.utils.ClickUtils
 import com.example.pokemonxdigimon.utils.ColorUtils
 import com.example.pokemonxdigimon.viewmodel.PokemonDetailViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -131,7 +130,7 @@ private fun PokemonDetailScreenContent(
             ) {
                 // 返回按鈕
                 IconButton(
-                    onClick = onBackClick,
+                    onClick = { ClickUtils.onSingleClick(onBackClick) },
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Icon(

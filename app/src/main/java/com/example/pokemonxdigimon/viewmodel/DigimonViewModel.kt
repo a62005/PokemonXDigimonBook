@@ -1,6 +1,5 @@
 package com.example.pokemonxdigimon.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonxdigimon.base.BaseIntent
 import com.example.pokemonxdigimon.base.BaseViewModel
@@ -42,7 +41,6 @@ class DigimonViewModel(private val repository: DigimonRepository) : BaseViewMode
     }
 
     private fun loadMoreData() {
-        Log.d("abcd", "load ${repository.maxCount}")
         if (_uiState.value.isLoadingMore || !_uiState.value.hasMore) return
 
         viewModelScope.launch {

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.lib_database.entity.SimpleDigimonBean
+import com.example.pokemonxdigimon.utils.ClickUtils
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -35,7 +36,7 @@ fun DigimonCard(
     animatedContentScope: AnimatedVisibilityScope? = null,
 ) {
     Card(
-        onClick = onClick,
+        onClick = { ClickUtils.onSingleClick(onClick) },
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f),

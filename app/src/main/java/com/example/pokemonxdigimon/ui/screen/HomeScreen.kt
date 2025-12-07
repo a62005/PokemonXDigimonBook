@@ -2,7 +2,6 @@ package com.example.pokemonxdigimon.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pokemonxdigimon.R
+import com.example.pokemonxdigimon.utils.singleClick
 
 @Composable
 fun HomeScreen(
@@ -34,7 +34,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .clickable(onClick = onPokemonClick),
+                .singleClick(onClick = onPokemonClick),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -60,7 +60,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .clickable(onClick = onDigimonClick),
+                .singleClick(onClick = onDigimonClick),
             contentAlignment = Alignment.Center
         ) {
             Image(

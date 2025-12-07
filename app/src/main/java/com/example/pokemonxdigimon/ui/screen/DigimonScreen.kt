@@ -40,6 +40,7 @@ import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.DigimonIntent
 import com.example.pokemonxdigimon.mvi.state.DigimonUiState
 import com.example.pokemonxdigimon.ui.card.DigimonCard
+import com.example.pokemonxdigimon.utils.ClickUtils
 import com.example.pokemonxdigimon.viewmodel.DigimonViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
@@ -106,10 +107,11 @@ private fun DigimonScreenContent(
             TopAppBar(
                 title = { Text(stringResource(R.string.digimon), color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { ClickUtils.onSingleClick(onBackClick) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
                     }
                 }

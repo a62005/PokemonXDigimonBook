@@ -3,14 +3,12 @@ package com.example.pokemonxdigimon.ui.screen
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -42,6 +40,7 @@ import com.example.pokemonxdigimon.base.ErrorHandler
 import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonUiState
 import com.example.pokemonxdigimon.ui.card.PokemonCard
+import com.example.pokemonxdigimon.utils.ClickUtils
 import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
@@ -108,7 +107,7 @@ private fun PokemonScreenContent(
             TopAppBar(
                 title = { Text(stringResource(R.string.pokemon), color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { ClickUtils.onSingleClick(onBackClick) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
