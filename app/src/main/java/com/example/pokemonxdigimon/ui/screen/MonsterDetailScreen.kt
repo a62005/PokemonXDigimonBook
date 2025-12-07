@@ -8,7 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ import com.example.pokemonxdigimon.utils.ClickUtils
  * 通用怪獸詳情頁面
  * 支持 Pokemon 和 Digimon
  */
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun <T : IDetailBean> MonsterDetailScreen(
     monster: T?,
@@ -156,28 +157,28 @@ fun <T : IDetailBean> MonsterDetailScreen(
                         }
 
                         // TYPE 列表
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            val types = monster.types
-                            if (types.isNullOrEmpty()) {
-                                Text(
-                                    text = stringResource(R.string.no_type),
-                                    color = Color.White,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            } else {
-                                types.forEachIndexed { index, type ->
+                        val types = monster.types
+                        if (types.isNullOrEmpty()) {
+                            Text(
+                                text = stringResource(R.string.no_type),
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp)
+                            )
+                        } else {
+                            FlowRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+                            ) {
+                                types.forEach { type ->
                                     TypeItem(type = type)
-                                    if (index < types.size - 1) {
-                                        Spacer(modifier = Modifier.width(16.dp))
-                                    }
                                 }
                             }
                         }
