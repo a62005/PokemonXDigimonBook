@@ -60,7 +60,7 @@ fun DigimonCard(
                             .weight(1f)
                             .padding(8.dp)
                             .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "digimon-image-${digimonBean.id}"),
+                                sharedContentState = rememberSharedContentState(key = "monster-image-${digimonBean.id}"),
                                 animatedVisibilityScope = animatedContentScope
                             ),
                         contentScale = ContentScale.Fit
@@ -74,7 +74,7 @@ fun DigimonCard(
                             .fillMaxWidth()
                             .padding(8.dp)
                             .sharedBounds(
-                                sharedContentState = rememberSharedContentState(key = "digimon-name-${digimonBean.id}"),
+                                sharedContentState = rememberSharedContentState(key = "monster-name-${digimonBean.id}"),
                                 animatedVisibilityScope = animatedContentScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = 300)
