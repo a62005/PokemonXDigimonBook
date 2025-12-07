@@ -4,11 +4,14 @@ data class DigimonDetailModel(
     val id: Int,
     val name: String,
     val images: List<DigimonImage>,
-    val type: List<DigimonType>,
+    val types: List<DigimonType>,
     val descriptions: List<DigimonDescription>
 ) {
     val imageUrl: String
         get() = images.firstOrNull()?.href ?: ""
+
+    val englishDescription: String
+        get() = descriptions.firstOrNull { it.language.contains("en") }?.description ?: ""
 }
 
 data class DigimonType(
