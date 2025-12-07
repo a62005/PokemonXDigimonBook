@@ -1,6 +1,8 @@
 package com.example.pokemonxdigimon
 
-import com.example.pokemonxdigimon.manager.NetworkManager
+import com.example.pokemonxdigimon.manager.DigimonNetworkManager
+import com.example.pokemonxdigimon.manager.PokemonNetworkManager
+import com.example.pokemonxdigimon.repository.DigimonRepository
 import com.example.pokemonxdigimon.repository.MainRepository
 import com.example.pokemonxdigimon.repository.PokemonDetailRepository
 import com.example.pokemonxdigimon.repository.PokemonRepository
@@ -17,6 +19,7 @@ val repositoryModule = module {
     factoryOf(::MainRepository)
     factoryOf(::PokemonRepository)
     factoryOf(::PokemonDetailRepository)
+    factoryOf(::DigimonRepository)
 }
 
 val viewModelModule = module {
@@ -30,8 +33,13 @@ val utilsModule = module {
         Dispatchers.IO
     }
     factory {
-        NetworkManager(
+        PokemonNetworkManager(
             get(named("pokemon"))
+        )
+    }
+    factory {
+        DigimonNetworkManager(
+            get(named("digimon"))
         )
     }
 }

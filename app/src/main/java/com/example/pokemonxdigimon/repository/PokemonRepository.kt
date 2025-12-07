@@ -1,11 +1,11 @@
 package com.example.pokemonxdigimon.repository
 
-import com.example.lib_database.AppDatabase
+import com.example.lib_database.dao.PokemonDao
 import com.example.lib_database.entity.PokemonEntity
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.lib_database.entity.Stat
 import com.example.network.data.ApiResponseData
-import com.example.pokemonxdigimon.manager.NetworkManager
+import com.example.pokemonxdigimon.manager.PokemonNetworkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -13,15 +13,14 @@ import kotlinx.coroutines.withContext
 
 class PokemonRepository(
     private val ioDispatcher: CoroutineDispatcher,
-    private val database: AppDatabase,
-    private val networkManager: NetworkManager
+    private val pokemonDao: PokemonDao,
+    private val pokemonNetworkManager: PokemonNetworkManager
 ) {
 
     companion object {
         private const val PAGE_SIZE = 30
     }
-    
-    private val pokemonDao = database.pokemonDao()
+
     var maxCount = 0
         private set
     
@@ -44,7 +43,7 @@ class PokemonRepository(
     }
 
     private suspend fun setMaxCount() {
-        networkManager.getPokemonCount().data?.let {
+        pokemonNetworkManager.getPokemonCount().data?.let {
             maxCount = it
         }
     }
@@ -52,7 +51,7 @@ class PokemonRepository(
     suspend fun loadMorePokemon(offset: Int): ApiResponseData<Unit> {
         return withContext(ioDispatcher) {
             // 獲取 Pokemon 列表
-            val listResponse = networkManager.getPokemonList(offset = offset, limit = PAGE_SIZE)
+            val listResponse = pokemonNetworkManager.getPokemonList(offset = offset, limit = PAGE_SIZE)
             
             if (listResponse.hasError) {
                 return@withContext ApiResponseData(
@@ -68,7 +67,7 @@ class PokemonRepository(
                     val name = pokemonResult.name
                     val existing = pokemonDao.getPokemonByName(pokemonResult.name)
                     if (existing == null) {
-                        val detailResponse = networkManager.getPokemonByName(name)
+                        val detailResponse = pokemonNetworkManager.getPokemonByName(name)
                         if (detailResponse.hasError) {
                             return@withContext ApiResponseData(
                                 data = null,

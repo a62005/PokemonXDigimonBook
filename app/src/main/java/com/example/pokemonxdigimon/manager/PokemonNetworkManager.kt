@@ -6,7 +6,7 @@ import com.example.network.data.pokemon.PokemonDetailModel
 import com.example.network.data.pokemon.PokemonListModel
 import com.example.network.imp.IHttpClient
 
-class NetworkManager(
+class PokemonNetworkManager(
     private val pokemonClient: IHttpClient
 ) {
     private val pokemonApi: PokemonApi = pokemonClient.create(PokemonApi::class.java)
