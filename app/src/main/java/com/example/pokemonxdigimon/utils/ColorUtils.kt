@@ -25,7 +25,7 @@ object ColorUtils {
             "dark" -> "#303943"
             "steel" -> "#4A425A"
             "flying" -> "#C379CB"
-            else -> "#7986CB"
+            else -> "#CCCCCC"
         }
         return Color.parseColor(color)
     }

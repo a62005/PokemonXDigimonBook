@@ -11,4 +11,7 @@
     <string name="speed">SPD</string>
     <string name="exp">EXP</string>
 
+    <string name="no_type">No Type</string>
+    <string name="description">Description</string>
+    <string name="no_description">No Description</string>
 </resources>
