@@ -15,7 +15,7 @@ data class PokemonDetailModel(
 
 data class PokemonType(
     val slot: Int,
-    val pokemonTypeName: PokemonTypeName
+    val type: PokemonTypeName
 )
 
 data class PokemonTypeName(
@@ -25,7 +25,7 @@ data class PokemonTypeName(
 data class PokemonStat(
     @SerializedName("base_stat")
     val baseStat: Int,
-    val pokemonStatName: PokemonStatName
+    val stat: PokemonStatName
 )
 
 data class PokemonStatName(
