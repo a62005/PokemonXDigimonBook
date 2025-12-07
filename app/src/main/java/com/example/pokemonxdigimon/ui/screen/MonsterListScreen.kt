@@ -64,20 +64,10 @@ fun <T : ISimpleBean> MonsterListScreen(
         monster: T,
         onClick: () -> Unit,
         sharedTransitionScope: SharedTransitionScope,
-        animatedContentScope: AnimatedVisibilityScope,
-        shouldLoadImage: Boolean
+        animatedContentScope: AnimatedVisibilityScope
     ) -> Unit
 ) {
     val listState = rememberLazyGridState()
-    var shouldLoadImages by rememberSaveable { mutableStateOf(false) }
-
-    // 延遲載入圖片，等待動畫完成（只在首次進入時執行）
-    LaunchedEffect(Unit) {
-        if (!shouldLoadImages) {
-            delay(500)
-            shouldLoadImages = true
-        }
-    }
 
     // 通用錯誤處理
     ErrorHandler(
@@ -151,13 +141,11 @@ fun <T : ISimpleBean> MonsterListScreen(
                     ) { _, monster ->
                         renderCard(
                             monster,
-                            { 
-                                shouldLoadImages = true
+                            {
                                 onMonsterClick(monster)
                             },
                             sharedTransitionScope,
-                            animatedContentScope,
-                            shouldLoadImages
+                            animatedContentScope
                         )
                     }
 

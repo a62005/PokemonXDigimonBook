@@ -42,8 +42,7 @@ fun MonsterCard(
     textColor: Color = Color.White,
     onClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope? = null,
-    animatedContentScope: AnimatedVisibilityScope? = null,
-    shouldLoadImage: Boolean = true
+    animatedContentScope: AnimatedVisibilityScope? = null
 ) {
     val context = LocalContext.current
 
@@ -74,7 +73,6 @@ fun MonsterCard(
                             .fillMaxWidth()
                             .weight(1f)
                             .padding(8.dp)
-                            .alpha(if (shouldLoadImage) 1f else 0f)
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = "monster-image-${monster.id}"),
                                 animatedVisibilityScope = animatedContentScope
@@ -108,8 +106,7 @@ fun MonsterCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .padding(8.dp)
-                        .alpha(if (shouldLoadImage) 1f else 0f),
+                        .padding(8.dp),
                     contentScale = ContentScale.Fit
                 )
                 Text(

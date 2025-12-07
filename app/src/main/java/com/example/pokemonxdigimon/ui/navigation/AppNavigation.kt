@@ -45,9 +45,7 @@ fun AppNavigation(navController: NavHostController) {
                         onMonsterClick = { monster ->
                             navController.navigate(Screen.PokemonDetail.createRoute(monster.id))
                         },
-                        onBackClick = { navController.popBackStack() },
-                        sharedTransitionScope = getSharedTransitionScope(),
-                        animatedContentScope = getAnimatedVisibilityScope()
+                        onBackClick = { navController.popBackStack() }
                     )
                 }
             ),
@@ -83,9 +81,7 @@ fun AppNavigation(navController: NavHostController) {
                         onMonsterClick = { digimon ->
                             navController.navigate(Screen.DigimonDetail.createRoute(digimon.id))
                         },
-                        onBackClick = { navController.popBackStack() },
-                        sharedTransitionScope = getSharedTransitionScope(),
-                        animatedContentScope = getAnimatedVisibilityScope()
+                        onBackClick = { navController.popBackStack() }
                     )
                 }
             ),
