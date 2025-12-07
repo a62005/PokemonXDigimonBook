@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.lib_database.entity.PokemonEntity
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
 import com.example.pokemonxdigimon.utils.ClickUtils
@@ -120,6 +121,7 @@ fun PokemonCardPreview() {
             simplePokemonBean = SimplePokemonBean(
                 id = 25,
                 name = "Pikachu",
+                imageUrl = PokemonEntity.getImageUrl(25),
                 types = listOf("electric")
             ),
             {},

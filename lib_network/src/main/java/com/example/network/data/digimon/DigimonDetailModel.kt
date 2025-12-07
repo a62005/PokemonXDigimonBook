@@ -10,8 +10,8 @@ data class DigimonDetailModel(
     val imageUrl: String
         get() = images.firstOrNull()?.href ?: ""
 
-    val englishDescription: String
-        get() = descriptions.firstOrNull { it.language.contains("en") }?.description ?: ""
+    val englishDescription: String?
+        get() = descriptions.firstOrNull { it.language.contains("en") }?.description
 }
 
 data class DigimonType(

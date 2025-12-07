@@ -196,8 +196,8 @@ private fun DigimonDetailScreenContent(
                         .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    val types = digimon.type
-                    if (types.isEmpty()) {
+                    val types = digimon.types
+                    if (types.isNullOrEmpty()) {
                         Text(
                             text = stringResource(R.string.no_type),
                             color = Color.White,
@@ -216,7 +216,7 @@ private fun DigimonDetailScreenContent(
                         }
                     }
                 }
-                if (digimon.description.isNotEmpty()) {
+                if (!digimon.description.isNullOrEmpty()) {
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -237,7 +237,7 @@ private fun DigimonDetailScreenContent(
                             .height(16.dp)
                     )
                     Text(
-                        text = digimon.description,
+                        text = digimon.description!!,
                         color = Color.White,
                         fontSize = 18.sp,
                         modifier = Modifier

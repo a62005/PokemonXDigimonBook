@@ -91,7 +91,7 @@ class DigimonRepository(
                                 id = detail.id,
                                 name = detail.name,
                                 imageUrl = detail.imageUrl,
-                                type = detail.types.map { it.type },
+                                types = detail.types.map { it.type },
                                 description = detail.englishDescription
                             )
                             digimonDao.insert(entity)

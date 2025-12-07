@@ -12,7 +12,7 @@ abstract class PokemonDao: BaseDao<PokemonEntity>() {
     @Query("SELECT COUNT(*) FROM PokemonEntity")
     abstract suspend fun getSize(): Int
     
-    @Query("SELECT id, name, types FROM PokemonEntity ORDER BY id ASC")
+    @Query("SELECT id, name, imageUrl, types FROM PokemonEntity ORDER BY id ASC")
     abstract fun observeSimplePokemonList(): Flow<List<SimplePokemonBean>>
     
     @Query("SELECT * FROM PokemonEntity WHERE id = :id")

@@ -79,6 +79,7 @@ class PokemonRepository(
                             val entity = PokemonEntity(
                                 id = detail.id,
                                 name = detail.name,
+                                imageUrl = PokemonEntity.getImageUrl(detail.id),
                                 height = detail.height,
                                 weight = detail.weight,
                                 types = detail.types.map { it.type.name },
