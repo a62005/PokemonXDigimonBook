@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -109,13 +110,14 @@ private fun DigimonDetailScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .background(Color.DarkGray)
     ) {
         // 白色背景區域（帶圓角）
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(2f)
                 .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                 .background(Color.White)
         ) {
@@ -159,7 +161,7 @@ private fun DigimonDetailScreenContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f)
+                .weight(3f)
         ) {
             Column(
                 modifier = Modifier
