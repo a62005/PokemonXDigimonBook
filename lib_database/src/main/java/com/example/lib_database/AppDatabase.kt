@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.lib_database.converter.Converters
+import com.example.lib_database.dao.DigimonDao
 import com.example.lib_database.dao.PokemonDao
 import com.example.lib_database.entity.DigimonEntity
 import com.example.lib_database.entity.PokemonEntity
@@ -39,4 +40,5 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun pokemonDao() : PokemonDao
+    abstract fun digimonDao() : DigimonDao
 }

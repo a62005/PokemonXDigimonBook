@@ -6,4 +6,5 @@ import org.koin.dsl.module
 val databaseModule = module {
     single { AppDatabase.invoke(androidContext()) }
     single { get<AppDatabase>().pokemonDao() }
+    single { get<AppDatabase>().digimonDao() }
 }
