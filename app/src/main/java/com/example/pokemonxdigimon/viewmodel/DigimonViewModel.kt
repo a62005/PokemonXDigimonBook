@@ -7,14 +7,11 @@ import com.example.pokemonxdigimon.mvi.intent.DigimonIntent
 import com.example.pokemonxdigimon.mvi.state.DigimonUiState
 import com.example.pokemonxdigimon.repository.DigimonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DigimonViewModel(private val repository: DigimonRepository) : BaseViewModel<DigimonUiState>() {
     override val _uiState = MutableStateFlow(DigimonUiState())
-    override val uiState: StateFlow<DigimonUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {

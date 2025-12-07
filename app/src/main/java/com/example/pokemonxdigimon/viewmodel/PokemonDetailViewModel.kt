@@ -7,8 +7,6 @@ import com.example.pokemonxdigimon.mvi.intent.PokemonDetailIntent
 import com.example.pokemonxdigimon.mvi.state.PokemonDetailUiState
 import com.example.pokemonxdigimon.repository.PokemonDetailRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -17,7 +15,6 @@ class PokemonDetailViewModel(
 ) : BaseViewModel<PokemonDetailUiState>() {
     
     override val _uiState = MutableStateFlow(PokemonDetailUiState())
-    override val uiState: StateFlow<PokemonDetailUiState> = _uiState.asStateFlow()
 
     override fun handleIntent(intent: BaseIntent?) {
         when (intent) {
