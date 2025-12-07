@@ -17,4 +17,7 @@ abstract class DigimonDao: BaseDao<DigimonEntity>() {
 
     @Query("SELECT * FROM DigimonEntity WHERE name = :name")
     abstract suspend fun getDigimonByName(name: String): DigimonEntity?
+
+    @Query("SELECT * FROM DigimonEntity WHERE id = :id")
+    abstract fun observeDigimonById(id: Int): Flow<DigimonEntity?>
 }

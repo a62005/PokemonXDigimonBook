@@ -2,10 +2,12 @@ package com.example.pokemonxdigimon
 
 import com.example.pokemonxdigimon.manager.DigimonNetworkManager
 import com.example.pokemonxdigimon.manager.PokemonNetworkManager
+import com.example.pokemonxdigimon.repository.DigimonDetailRepository
 import com.example.pokemonxdigimon.repository.DigimonRepository
 import com.example.pokemonxdigimon.repository.MainRepository
 import com.example.pokemonxdigimon.repository.PokemonDetailRepository
 import com.example.pokemonxdigimon.repository.PokemonRepository
+import com.example.pokemonxdigimon.viewmodel.DigimonDetailViewModel
 import com.example.pokemonxdigimon.viewmodel.DigimonViewModel
 import com.example.pokemonxdigimon.viewmodel.MainViewModel
 import com.example.pokemonxdigimon.viewmodel.PokemonDetailViewModel
@@ -21,6 +23,7 @@ val repositoryModule = module {
     factoryOf(::PokemonRepository)
     factoryOf(::PokemonDetailRepository)
     factoryOf(::DigimonRepository)
+    factoryOf(::DigimonDetailRepository)
 }
 
 val viewModelModule = module {
@@ -28,6 +31,7 @@ val viewModelModule = module {
     viewModelOf(::PokemonViewModel)
     viewModelOf(::PokemonDetailViewModel)
     viewModelOf(::DigimonViewModel)
+    viewModelOf(::DigimonDetailViewModel)
 }
 
 val utilsModule = module {
