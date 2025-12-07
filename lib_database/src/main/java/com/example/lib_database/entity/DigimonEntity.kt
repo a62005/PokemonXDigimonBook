@@ -13,10 +13,19 @@ data class DigimonEntity(
     override val imageUrl: String,
     override val types: List<String>?,
     override val description: String?
-): IDetailBean
+): IDetailBean {
+
+    override fun getMainType(): String {
+        return types?.firstOrNull() ?: "unknown"
+    }
+}
 
 data class SimpleDigimonBean(
     override val id: Int,
     override val name: String,
     override val imageUrl: String
-): ISimpleBean
+): ISimpleBean {
+    override fun getMainType(): String? {
+        return null
+    }
+}

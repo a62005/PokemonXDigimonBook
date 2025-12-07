@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokemonxdigimon.base.BaseIntent
 import com.example.pokemonxdigimon.base.BaseViewModel
 import com.example.pokemonxdigimon.mvi.intent.PokemonIntent
-import com.example.pokemonxdigimon.mvi.state.PokemonUiState
+import com.example.pokemonxdigimon.mvi.state.ListDataUiState
 import com.example.pokemonxdigimon.repository.PokemonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -12,17 +12,17 @@ import kotlinx.coroutines.launch
 
 class PokemonViewModel(
     private val repository: PokemonRepository
-) : BaseViewModel<PokemonUiState>() {
-    override val _uiState = MutableStateFlow(PokemonUiState())
+) : BaseViewModel<ListDataUiState>() {
+    override val _uiState = MutableStateFlow(ListDataUiState())
 
     init {
         viewModelScope.launch {
             repository.observePokemonList().collect { list ->
                 _uiState.update {
                     it.copy(
-                        pokemonList = list,
-                        hasMore = if (it.hasMore && it.pokemonList.isNotEmpty()) {
-                            it.pokemonList.size <= repository.maxCount
+                        dataList = list,
+                        hasMore = if (it.hasMore && it.dataList.isNotEmpty()) {
+                            it.dataList.size <= repository.maxCount
                         } else {
                             true
                         }
@@ -45,7 +45,7 @@ class PokemonViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingMore = true, error = null) }
 
-            val offset = _uiState.value.pokemonList.size
+            val offset = _uiState.value.dataList.size
             val result = repository.loadMorePokemon(offset)
             if (result.hasError) {
                 _uiState.update { it.copy(error = result.error?.message) }

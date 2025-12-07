@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.lib_database.bean.ISimpleBean
 import com.example.lib_database.entity.PokemonEntity
 import com.example.lib_database.entity.SimplePokemonBean
 import com.example.pokemonxdigimon.ui.theme.PokemonXDigimonTheme
@@ -33,13 +34,13 @@ import com.example.pokemonxdigimon.utils.ColorUtils
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PokemonCard(
-    simplePokemonBean: SimplePokemonBean,
+fun ListDataCard(
+    bean: ISimpleBean,
     onClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedVisibilityScope? = null
 ) {
-    val backgroundColor = Color(ColorUtils.getTypeColor(simplePokemonBean.mainType))
+    val backgroundColor = Color(ColorUtils.getTypeColor(bean.getMainType()))
     
     Card(
         onClick = { ClickUtils.onSingleClick(onClick) },
@@ -59,20 +60,20 @@ fun PokemonCard(
             if (sharedTransitionScope != null && animatedContentScope != null) {
                 with(sharedTransitionScope) {
                     AsyncImage(
-                        model = simplePokemonBean.imageUrl,
-                        contentDescription = simplePokemonBean.name,
+                        model = bean.imageUrl,
+                        contentDescription = bean.name,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                             .padding(8.dp)
                             .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "pokemon-image-${simplePokemonBean.id}"),
+                                sharedContentState = rememberSharedContentState(key = "monster-image-${bean.id}"),
                                 animatedVisibilityScope = animatedContentScope
                             ),
                         contentScale = ContentScale.Fit
                     )
                     Text(
-                        text = simplePokemonBean.name,
+                        text = bean.name,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         color = Color.White,
@@ -80,7 +81,7 @@ fun PokemonCard(
                             .fillMaxWidth()
                             .padding(8.dp)
                             .sharedBounds(
-                                sharedContentState = rememberSharedContentState(key = "pokemon-name-${simplePokemonBean.id}"),
+                                sharedContentState = rememberSharedContentState(key = "monster-name-${bean.id}"),
                                 animatedVisibilityScope = animatedContentScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = 300)
@@ -90,8 +91,8 @@ fun PokemonCard(
                 }
             } else {
                 AsyncImage(
-                    model = simplePokemonBean.imageUrl,
-                    contentDescription = simplePokemonBean.name,
+                    model = bean.imageUrl,
+                    contentDescription = bean.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
@@ -99,7 +100,7 @@ fun PokemonCard(
                     contentScale = ContentScale.Fit
                 )
                 Text(
-                    text = simplePokemonBean.name,
+                    text = bean.name,
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     color = Color.White,
@@ -117,8 +118,8 @@ fun PokemonCard(
 @Composable
 fun PokemonCardPreview() {
     PokemonXDigimonTheme {
-        PokemonCard(
-            simplePokemonBean = SimplePokemonBean(
+        ListDataCard(
+            bean = SimplePokemonBean(
                 id = 25,
                 name = "Pikachu",
                 imageUrl = PokemonEntity.getImageUrl(25),

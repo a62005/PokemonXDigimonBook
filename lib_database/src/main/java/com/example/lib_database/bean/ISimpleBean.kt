@@ -4,4 +4,6 @@ interface ISimpleBean {
     val id: Int
     val name: String
     val imageUrl: String
+
+    fun getMainType(): String?
 }
