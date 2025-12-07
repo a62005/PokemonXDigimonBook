@@ -6,6 +6,7 @@ import com.example.pokemonxdigimon.repository.DigimonRepository
 import com.example.pokemonxdigimon.repository.MainRepository
 import com.example.pokemonxdigimon.repository.PokemonDetailRepository
 import com.example.pokemonxdigimon.repository.PokemonRepository
+import com.example.pokemonxdigimon.viewmodel.DigimonViewModel
 import com.example.pokemonxdigimon.viewmodel.MainViewModel
 import com.example.pokemonxdigimon.viewmodel.PokemonDetailViewModel
 import com.example.pokemonxdigimon.viewmodel.PokemonViewModel
@@ -26,6 +27,7 @@ val viewModelModule = module {
     viewModelOf(::MainViewModel)
     viewModelOf(::PokemonViewModel)
     viewModelOf(::PokemonDetailViewModel)
+    viewModelOf(::DigimonViewModel)
 }
 
 val utilsModule = module {

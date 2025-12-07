@@ -47,6 +47,18 @@ class DigimonRepository(
         }
     }
 
+    private suspend fun getNextPage(): Int {
+        return withContext(ioDispatcher) {
+            val curSize = digimonDao.getSize()
+            curSize / PAGE_SIZE
+        }
+    }
+
+    suspend fun loadMoreDigimon(): ApiResponseData<Unit> {
+        val currentPage = getNextPage()
+        return loadMoreDigimon(currentPage)
+    }
+
     suspend fun loadMoreDigimon(page: Int): ApiResponseData<Unit> {
         return withContext(ioDispatcher) {
             // 獲取 Pokemon 列表

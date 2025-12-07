@@ -70,13 +70,20 @@ fun AppNavigation(navController: NavHostController) {
                 }
             ),
             
-            // Digimon 頁面
+            // Digimon 列表頁面
             NavDestination(
                 route = Screen.Digimon.route,
                 enterTransition = NavTransitions.slideInFromRight,
+                exitTransition = NavTransitions.noExitTransition,
+                popEnterTransition = NavTransitions.noTransition,
                 popExitTransition = NavTransitions.slideOutToRight,
                 content = {
-                    DigimonScreen(onBackClick = { navController.popBackStack() })
+                    DigimonScreen(
+                        onDigimonClick = {},
+                        onBackClick = { navController.popBackStack() },
+                        sharedTransitionScope = getSharedTransitionScope(),
+                        animatedContentScope = getAnimatedVisibilityScope()
+                    )
                 }
             )
         )
