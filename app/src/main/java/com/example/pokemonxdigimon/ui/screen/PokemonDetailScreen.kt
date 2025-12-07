@@ -110,7 +110,7 @@ private fun PokemonDetailScreenContent(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedVisibilityScope
 ) {
-    val backgroundColor = Color(ColorUtils.getTypeColor(pokemon.mainType))
+    val backgroundColor = Color(ColorUtils.getTypeColor(pokemon.getMainType()))
     val imageUrl = pokemon.imageUrl
 
     Column(

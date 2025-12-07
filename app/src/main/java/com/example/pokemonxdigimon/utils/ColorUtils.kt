@@ -5,7 +5,8 @@ import java.util.Locale
 
 object ColorUtils {
 
-    fun getTypeColor(type: String): Int {
+    fun getTypeColor(type: String?): Int {
+        if (type == null) return Color.parseColor("#CCCCCC")
         val color = when (type.lowercase(Locale.getDefault())) {
             "grass" -> "#2CDAB1"
             "fire" -> "#F7706B"

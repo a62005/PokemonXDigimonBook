@@ -25,14 +25,16 @@ data class PokemonEntity(
             return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
         }
     }
-    val mainType: String
-        get() = types.firstOrNull() ?: "unknown"
     
     val weightInKg: Double
         get() = weight / 10.0
     
     val heightInM: Double
         get() = height / 10.0
+
+    override fun getMainType(): String? {
+        return types.firstOrNull()
+    }
 }
 
 data class Stat(
@@ -49,7 +51,9 @@ data class SimplePokemonBean(
     override val imageUrl: String,
     val types: List<String>
 ): ISimpleBean {
-    val mainType: String
-        get() = types.firstOrNull() ?: "unknown"
+
+    override fun getMainType(): String? {
+        return types.firstOrNull()
+    }
 }
 
