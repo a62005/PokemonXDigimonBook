@@ -20,9 +20,9 @@ class PokemonViewModel(
             repository.observePokemonList().collect { list ->
                 _uiState.update {
                     it.copy(
-                        pokemonList = list,
-                        hasMore = if (it.hasMore && it.pokemonList.isNotEmpty()) {
-                            it.pokemonList.size <= repository.maxCount
+                        monsterList = list,
+                        hasMore = if (it.hasMore && it.monsterList.isNotEmpty()) {
+                            it.monsterList.size <= repository.maxCount
                         } else {
                             true
                         }
@@ -45,7 +45,7 @@ class PokemonViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingMore = true, error = null) }
 
-            val offset = _uiState.value.pokemonList.size
+            val offset = _uiState.value.monsterList.size
             val result = repository.loadMorePokemon(offset)
             if (result.hasError) {
                 _uiState.update { it.copy(error = result.error?.message) }

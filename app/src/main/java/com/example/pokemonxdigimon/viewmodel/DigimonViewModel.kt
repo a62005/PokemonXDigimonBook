@@ -18,9 +18,9 @@ class DigimonViewModel(private val repository: DigimonRepository) : BaseViewMode
             repository.observeDigimonList().collect { list ->
                 _uiState.update {
                     it.copy(
-                        digimonList = list,
-                        hasMore = if (it.hasMore && it.digimonList.isNotEmpty()) {
-                            it.digimonList.size <= repository.maxCount
+                        monsterList = list,
+                        hasMore = if (it.hasMore && it.monsterList.isNotEmpty()) {
+                            it.monsterList.size <= repository.maxCount
                         } else {
                             true
                         }
