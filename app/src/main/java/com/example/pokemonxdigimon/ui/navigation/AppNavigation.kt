@@ -42,8 +42,8 @@ fun AppNavigation(navController: NavHostController) {
                 popExitTransition = NavTransitions.slideOutToRight,
                 content = {
                     PokemonScreen(
-                        onPokemonClick = { pokemonId ->
-                            navController.navigate(Screen.PokemonDetail.createRoute(pokemonId))
+                        onMonsterClick = { monster ->
+                            navController.navigate(Screen.PokemonDetail.createRoute(monster.id))
                         },
                         onBackClick = { navController.popBackStack() },
                         sharedTransitionScope = getSharedTransitionScope(),
@@ -80,7 +80,7 @@ fun AppNavigation(navController: NavHostController) {
                 popExitTransition = NavTransitions.slideOutToRight,
                 content = {
                     DigimonScreen(
-                        onDigimonClick = { digimon ->
+                        onMonsterClick = { digimon ->
                             navController.navigate(Screen.DigimonDetail.createRoute(digimon.id))
                         },
                         onBackClick = { navController.popBackStack() },
