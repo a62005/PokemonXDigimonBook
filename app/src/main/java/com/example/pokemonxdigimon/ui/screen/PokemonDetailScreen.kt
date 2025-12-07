@@ -116,8 +116,8 @@ private fun PokemonDetailScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .navigationBarsPadding()
             .background(Color.DarkGray)
+            .navigationBarsPadding()
     ) {
         // 有顏色的背景區域（帶圓角）
         Box(

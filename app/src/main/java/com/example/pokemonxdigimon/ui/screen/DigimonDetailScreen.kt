@@ -110,8 +110,8 @@ private fun DigimonDetailScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .navigationBarsPadding()
             .background(Color.DarkGray)
+            .navigationBarsPadding()
     ) {
         // 白色背景區域（帶圓角）
         Box(
