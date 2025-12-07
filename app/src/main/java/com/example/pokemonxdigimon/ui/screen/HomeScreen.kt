@@ -1,18 +1,21 @@
 package com.example.pokemonxdigimon.ui.screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pokemonxdigimon.R
 
@@ -21,25 +24,53 @@ fun HomeScreen(
     onPokemonClick: () -> Unit,
     onDigimonClick: () -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .background(Color.White)
     ) {
-        Button(
-            onClick = onPokemonClick,
-            modifier = Modifier.weight(1f)
+        // Pokemon 區域（上半部）
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .clickable(onClick = onPokemonClick),
+            contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(R.string.pokemon).toUpperCase(Locale.current))
+            Image(
+                painter = painterResource(id = R.mipmap.logo_pokemon),
+                contentDescription = "Pokemon",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp),
+                contentScale = ContentScale.Fit
+            )
         }
         
-        Button(
-            onClick = onDigimonClick,
-            modifier = Modifier.weight(1f)
+        // 分隔線
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(4.dp)
+                .background(Color.Black)
+        )
+        
+        // Digimon 區域（下半部）
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .clickable(onClick = onDigimonClick),
+            contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(R.string.digimon).toUpperCase(Locale.current))
+            Image(
+                painter = painterResource(id = R.mipmap.logo_digimon),
+                contentDescription = "Digimon",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp),
+                contentScale = ContentScale.Fit
+            )
         }
     }
 }
